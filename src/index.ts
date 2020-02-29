@@ -1,6 +1,7 @@
+import {Logger } from "./patterns/singleton/singleton";
 
-function f() {
-  console.log('some');
-}
-f();
+const logger = new Logger();
+const logge2 = new Logger();
+
+
 
