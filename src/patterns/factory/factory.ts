@@ -9,7 +9,7 @@ enum ShapTypes {
   square = 'square'
 }
 
-interface ShapeFactoryInterface {
+export interface ShapeFactoryInterface {
   buildShape(type: ShapTypes, shapeProps: ShapeProps): ShapeInterface;
 }
 
