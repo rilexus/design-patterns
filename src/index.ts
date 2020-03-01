@@ -1,7 +1,9 @@
-import {Logger } from "./patterns/singleton/singleton";
+import {StorageReader} from "./patterns/structural/adapter/StorageReader";
+import {StorageAdapter} from "./patterns/structural/adapter/StorageAdapter";
 
-const logger = new Logger();
-const logge2 = new Logger();
+const reader = new StorageReader<string | number>(new StorageAdapter());
+reader.saveData('id:1', 1);
+reader.saveData('id:2', 'data string');
 
 
 
