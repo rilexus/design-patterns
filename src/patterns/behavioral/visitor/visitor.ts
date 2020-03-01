@@ -61,7 +61,7 @@ export class Decrementor implements ListElementVisitor<any>{
 export class List<DataType> {
   head: ListElementInterface<DataType>;
 
-  append(element: ListElement<DataType>){
+  private append(element: ListElement<DataType>){
     // append element at the end
     if (!this.head.hasNext()){
       this.head.setNext(element);
