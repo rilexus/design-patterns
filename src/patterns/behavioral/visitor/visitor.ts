@@ -84,7 +84,7 @@ export class List<DataType> {
     }
   }
 
-  execute(visitor: ListElementVisitor<DataType>){
+  visit(visitor: ListElementVisitor<DataType>){
     let elem: ListElementInterface<DataType> = this.head;
     elem.accept(visitor); // execute on head
 
