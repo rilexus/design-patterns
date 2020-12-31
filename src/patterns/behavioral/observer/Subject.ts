@@ -3,7 +3,7 @@ interface Observer<State = any> {
 }
 
 
-class Subject<State = any> {
+class ObservableState /* also called "Subject" */<State = any> {
   observer: Observer[] = []
   state: State;
 
@@ -35,7 +35,8 @@ class Subject<State = any> {
   }
 }
 
-class SubjectObserverClass implements Observer<number | string> {
+class AnyStateObserver implements Observer<number | string> {
+  // implement the "stateDidUpdate" to react to state updates
   stateDidUpdate(state:number | string){
     // will be called every time the state on the subject is set
     console.log('stateDidUpdate: ', state)
@@ -43,19 +44,17 @@ class SubjectObserverClass implements Observer<number | string> {
 }
 
 class ObserverMain {
-  numberSubject: Subject<number>
-  stringSubject: Subject<string>
-  SubjectObserverClass:SubjectObserverClass
+  numberSubject: ObservableState<number>
+  stringSubject: ObservableState<string>
 
   constructor() {
-    this.numberSubject = new Subject<number>(1)
-    this.stringSubject = new Subject<string>('hallo')
+    this.numberSubject = new ObservableState<number>(1)
+    this.stringSubject = new ObservableState<string>('hallo')
 
-    this.SubjectObserverClass = new SubjectObserverClass()
+    const subjectObserverClass = new AnyStateObserver()
 
-    // this.SubjectObserverClass.stateDidUpdate will be registered and called on every state update (call to setState) of the Subject class.
-    this.numberSubject.addObserver(this.SubjectObserverClass)
-    this.stringSubject.addObserver(this.SubjectObserverClass)
+    this.numberSubject.addObserver(subjectObserverClass)
+    this.stringSubject.addObserver(subjectObserverClass)
   }
 
   setStateAndNotify(value: number | string){
