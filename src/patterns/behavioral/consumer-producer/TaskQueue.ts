@@ -1,3 +1,5 @@
+
+// This object puts async tasks (function) in a queue and executes then parallel, concurrently one after another
 class TaskQueue {
 	tasksQueue = [];
 	consumerQueue = [];
