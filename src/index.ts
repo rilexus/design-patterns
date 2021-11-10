@@ -1,6 +1,3 @@
-import {nativeProxy} from "./patterns/structural";
-import {ObserverMain} from "./patterns/behavioral/observer/Subject";
+import {runConcurent} from "./patterns/behavioral/consumer-producer/run";
 
-const observerMain = new ObserverMain()
-observerMain.setStateAndNotify(2)
-observerMain.setStateAndNotify('some')
+runConcurent()
