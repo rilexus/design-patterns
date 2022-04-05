@@ -1,3 +1,7 @@
-import {runConcurent} from "./patterns/behavioral/consumer-producer/run";
+import mediator from "./behavioral/mediator";
 
-runConcurent()
+function main(){
+    mediator()
+}
+
+main()
