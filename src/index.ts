@@ -8,7 +8,6 @@ function main() {
     .setIsFinished(false);
 
   const task = builder.build();
-  console.log(task);
 }
 
 main();
