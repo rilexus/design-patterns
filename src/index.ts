@@ -1,7 +1,14 @@
-import mediator from "./behavioral/mediator";
+import TaskBuilder from "./creational/builder/Tasks";
 
-function main(){
-    mediator()
+function main() {
+  const builder = new TaskBuilder()
+    .setName("Stan")
+    .setDescription("Des")
+    .setDueDate("date")
+    .setIsFinished(false);
+
+  const task = builder.build();
+  console.log(task);
 }
 
-main()
+main();
