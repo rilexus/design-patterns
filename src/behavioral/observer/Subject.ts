@@ -1,69 +1,93 @@
 interface Observer<State = any> {
-  stateDidUpdate(state: State):void
+  stateDidUpdate(state: State): void;
 }
 
+interface Handler<State = any> {
+  (state: State): void;
+}
 
-class ObservableState /* also called "Subject" */<State = any> {
-  observer: Observer[] = []
+class State/* also called "Subject" */ <State = any> {
+  observer: (Observer<State> | Handler<State>)[] = [];
   state: State;
 
   constructor(initialState: State) {
-    this.state = initialState
+    this.state = initialState;
   }
 
-  notify(){
-    this.observer.forEach((observer) => {
-      observer.stateDidUpdate(this.state)
-    })
+  notify() {
+    this.observer.forEach(observer => {
+      if (typeof observer === "function") {
+        observer(this.state);
+      } else {
+        observer.stateDidUpdate(this.state);
+      }
+    });
   }
 
-  addObserver(observer: Observer){
-    this.observer.push(observer)
+  subscribe(handler: Handler<State>) {
+    this.observer.push(handler);
   }
 
-  setState(newState: State){
-    this.state = newState;
-    this.notify()
+  unsubscribe(handler) {
+    this.observer = this.observer.filter(h => h !== handler);
   }
 
-  getState(): State{
-    return this.state
+  addObserver(observer: Observer | ((state: State) => void)) {
+    this.observer.push(observer);
   }
 
-  removeObserver(observer: Observer){
-    this.observer = this.observer.filter( o => o !== observer)
+  removeObserver(observer: Observer) {
+    this.observer = this.observer.filter(o => o !== observer);
+  }
+
+  setState(state: State | ((oldState: State) => State)) {
+    if (typeof state === "function") {
+      // @ts-ignore
+      this.state = state(this.state);
+    } else {
+      this.state = state;
+    }
+    this.notify();
+  }
+
+  getState(): State {
+    return this.state;
   }
 }
 
 class AnyStateObserver implements Observer<number | string> {
   // implement the "stateDidUpdate" to react to state updates
-  stateDidUpdate(state:number | string){
+  stateDidUpdate(state: number | string) {
     // will be called every time the state on the subject is set
-    console.log('stateDidUpdate: ', state)
+    console.log("stateDidUpdate: ", state);
   }
 }
 
 class ObserverMain {
-  numberSubject: ObservableState<number>
-  stringSubject: ObservableState<string>
+  numberSubject: State<number>;
+  stringSubject: State<string>;
 
   constructor() {
-    this.numberSubject = new ObservableState<number>(1)
-    this.stringSubject = new ObservableState<string>('hallo')
+    this.numberSubject = new State<number>(1);
+    this.stringSubject = new State<string>("hallo");
 
-    const subjectObserverClass = new AnyStateObserver()
+    const subjectObserverClass = new AnyStateObserver();
 
-    this.numberSubject.addObserver(subjectObserverClass)
-    this.stringSubject.addObserver(subjectObserverClass)
+    this.numberSubject.addObserver(subjectObserverClass);
+    this.stringSubject.addObserver(subjectObserverClass);
+
+    this.numberSubject.subscribe(number => {
+      console.log({ number });
+    });
   }
 
-  setStateAndNotify(value: number | string){
-    if (typeof value === "string"){
-      this.stringSubject.setState(value)
+  setStateAndNotify(value: number | string) {
+    if (typeof value === "string") {
+      this.stringSubject.setState(value);
     } else if (typeof value === "number") {
-      this.numberSubject.setState(value)
+      this.numberSubject.setState(value);
     }
   }
 }
 
-export { ObserverMain }
+export { ObserverMain };
