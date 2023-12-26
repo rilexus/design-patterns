@@ -1,13 +1,14 @@
-import TaskBuilder from "./creational/builder/Tasks";
+import Logger, { pipeline } from "./behavioral/chain-of-responsibility";
 
-function main() {
-  const builder = new TaskBuilder()
-    .setName("Stan")
-    .setDescription("Des")
-    .setDueDate("date")
-    .setIsFinished(false);
+const pipe = pipeline();
 
-  const task = builder.build();
-}
+pipe.use(function addOne(o, next) {
+  console.log(o);
+  next(o + 1);
+});
+pipe.use(function addTwo(o, next) {
+  console.log(o);
+  next();
+});
 
-main();
+pipe.exec(1);
