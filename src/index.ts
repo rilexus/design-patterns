@@ -1,4 +1,5 @@
-import ObjectPool from "./creational/object-pool";
+import Multiton from "./creational/multiton";
 
-const a = new ObjectPool();
-const b = new ObjectPool();
+const mult1 = Multiton.getInstance(1);
+const mult2 = Multiton.getInstance(1);
+const mult3 = Multiton.getInstance(3);
